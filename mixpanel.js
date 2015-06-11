@@ -1,3 +1,4 @@
+console.log("**********************************************************");
 /*
  * Mixpanel JS Library v2.5.1
  *
@@ -2201,6 +2202,8 @@ Globals should be all caps
             return;
         }
 
+        debugger;
+
         // needed to correctly format responses
         var verbose_mode = this.get_config('verbose');
         if (data['verbose']) { verbose_mode = true; }
@@ -2402,6 +2405,14 @@ Globals should be all caps
 
         this._send_request(
             this.get_config('api_host') + "/track/",
+            { 'data': encoded_data },
+            this._prepare_callback(callback, truncated_data)
+        );
+
+        // RN Customization
+        debugger;
+        this._send_request(
+            HTTP_PROTOCOL + 'localhost:10115/wall/api/v2/mixpanel',
             { 'data': encoded_data },
             this._prepare_callback(callback, truncated_data)
         );
