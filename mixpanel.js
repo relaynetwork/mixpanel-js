@@ -1,4 +1,3 @@
-console.log("**********************************************************");
 /*
  * Mixpanel JS Library v2.5.1
  *
@@ -2196,13 +2195,12 @@ Globals should be all caps
         }
     };
 
-    MixpanelLib.prototype._send_request = function(url, data, callback) {
+    MixpanelLib.prototype._send_request = function(url, data, callback, method) {
         if (ENQUEUE_REQUESTS) {
             this.__request_queue.push(arguments);
             return;
         }
 
-        debugger;
 
         // needed to correctly format responses
         var verbose_mode = this.get_config('verbose');
@@ -2233,7 +2231,10 @@ Globals should be all caps
             document.body.appendChild(img);
         } else if (USE_XHR) {
             var req = new XMLHttpRequest();
-            req.open("GET", url, true);
+            //RN Customization
+            req.open(method || "GET", url, true);
+            req.setRequestHeader('XRN_CHECKHEADER', 'dsjh6xcKBFWZXGQH');
+            //end RN customization
             // send the mp_optout cookie
             // withCredentials cannot be modified until after calling .open on Android and Mobile Safari
             req.withCredentials = true;
@@ -2410,12 +2411,14 @@ Globals should be all caps
         );
 
         // RN Customization
-        debugger;
         this._send_request(
-            HTTP_PROTOCOL + 'localhost:10115/wall/api/v2/mixpanel',
+            HTTP_PROTOCOL + document.location.host + '/wall/api/v1/frontend-events',
             { 'data': encoded_data },
-            this._prepare_callback(callback, truncated_data)
+            this._prepare_callback(callback, truncated_data),
+            "POST"
         );
+
+        //END RN Customization
 
         return truncated_data;
     };
